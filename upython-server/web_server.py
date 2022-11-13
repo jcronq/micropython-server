@@ -29,9 +29,9 @@ def get_function_kwargs(arg_list, request, response):
 
 class WebServer:
     _run = True
-    addr = ('', 8008)
 
-    def __init__(self, *, enable_web_dav=False):
+    def __init__(self, port: int=8008, *, enable_web_dav=False):
+        self.__port = port
         self.__router = {
             "POST": {},
             "GET": {},
@@ -40,7 +40,7 @@ class WebServer:
 
     def start_listening(self):
         self.__socket = usocket.socket(usocket.AF_INET, usocket.SOCK_STREAM)
-        addr = usocket.getaddrinfo('0.0.0.0', 8008)[0][-1]
+        addr = usocket.getaddrinfo('0.0.0.0', self.__port)[0][-1]
         self.__socket.bind(addr)
         print("listening on {}:{}".format(addr[0], addr[1]))
         _thread.start_new_thread(self.__run, ())
