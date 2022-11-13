@@ -1,0 +1,12 @@
+{
+  "urls": [
+    ["upython-server/__init__.py", "github:org/jcronq/micropython-server/upython-server/__init__.py"],
+    ["upython-server/web_server.py", "github:org/jcronq/micropython-server/upython-server/web_server.py"],
+    ["upython-server/request.py", "github:org/jcronq/micropython-server/upython-server/request.py"],
+    ["upython-server/response.py", "github:org/jcronq/micropython-server/upython-server/response.py"],
+    ["upython-server/dav_functions.py", "github:org/jcronq/micropython-server/upython-server/dav_functions.py"],
+  ],
+  "deps": [],
+  "version": "0.1"
+}
+
