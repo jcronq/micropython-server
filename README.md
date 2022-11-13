@@ -1,46 +1,54 @@
-# TCS34725 - Color Temperature Sensor
-The TCS34725 is an RGB sensor.  I've connected it to an ESP32 and perform some mild processing to extract color temperature data as well.
+# MicroPython Lite-Rest Server
+This server contains a minimal REST Server with a simple interface.
 
-The interface file in rgb_sensor/src/rgb_sensor_tcs34725 is a complete implementation of the chips capabilities.
 
-The controller has implemented an auto-focus for the chips exposure and gain settings.
+## Example Usage
 
-These are likely the most useful parts of the project for anyone that has stumbled their way here.
+```python
+import json
+ 
+from src.lite_server.web_server import WebServer
+ 
+ 
+def start_webserver(sensor):
+    server = WebServer()
+ 
+    @server.GET("/hello_world")
+    def hello_world():
+        print("Hello World")
 
-## SETUP
+	# The response object will be automatically generated from the return value of the Function
+        return json.dumps({"msg": "Hello World!"})
 
-Add yourself to the dialout group.
-```bash
-sudo usermod -a -G dialout <username>
-```
+    @server.POST("/post_example")
+    def post_example(response):
+	# The response object can also be manipulated manually.  Get get the response object, simply add a resposne argument to the function.
+        response.set_status(200)
+        response.send()
+        machine.reset()
 
-Install the required dependencies.
-```
-sudo apt install picocom
-pip install -r dev-requirements.txt
-```
+def connect(cb):
+    import network
+    sta_if = network.WLAN(network.STA_IF)
+    if not sta_if.isconnected():
+    	wifi_name = "wifi"
+	wifi_pass = "password"
 
-## Flash the ESP32
-Flashing the ESP32 with microPython only needs to be done once.
-```bash
-make flash
-```
+        print(f"connecting to WiFi: {wifi_name}.")
+        sta_if.active(True)
+        sta_if.connect(wifi_name, wifi_pass)
 
-## Connecting to Serial Port
-Connect using rbash:
-```bash
-make connect
-```
+	# Noop until connected
+        while not sta_if.isconnected():
+            pass
 
-Or connect directly to the REPL:
-```bash
-make connect-repl
-```
+    print('network config:', sta_if.ifconfig())
+    cb()
+ 
+ def main():
+    cb = lambda: start_webserver(sensor)
+    connect(cb)
 
-To end the picocom session: hold [ctrl] and press [a] then [q] without releasing [ctrl].
-
-## Adding the code to the ESP32
-
-```bash
-make install
+ if __name__ == "__main__":
+ 	main()
 ```
